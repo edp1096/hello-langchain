@@ -15,6 +15,7 @@ new_db = FAISS.load_local("faiss_index", embeddings)
 callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 llm = LlamaCpp(
     model_path="./vicuna-7B-1.1-ggml_q4_0-ggjt_v3.bin",
+    n_batch=512,
     n_ctx=2048,
     callback_manager=callback_manager,
     verbose=True,
