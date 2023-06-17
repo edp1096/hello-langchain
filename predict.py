@@ -9,18 +9,17 @@ from langchain.chains import RetrievalQA
 
 # Load DB from local file
 embeddings = LlamaCppEmbeddings(model_path="./vicuna-7B-1.1-ggml_q4_0-ggjt_v3.bin")
-# embeddings = LlamaCppEmbeddings(model_path="./ggml-vic7b-q4_0.bin")
 new_db = FAISS.load_local("faiss_index", embeddings)
 
 # Use llama-cpp as the LLM for langchain
 callback_manager = CallbackManager([StreamingStdOutCallbackHandler()])
 llm = LlamaCpp(
     model_path="./vicuna-7B-1.1-ggml_q4_0-ggjt_v3.bin",
-    # model_path="./ggml-vic7b-q4_0.bin",
     n_ctx=2048,
     callback_manager=callback_manager,
     verbose=True,
     use_mlock=True,
+    n_gpu_layers=32,
 )
 
 retriever = new_db.as_retriever()
